@@ -3,19 +3,3 @@ __pycache__/
 *.tmp
 .ipynb_checkpoints/
 
-# Manuscript -- khong cong khai cho den khi bai duoc accept
-paper.txt
-results_new.txt
-_IEEE_Open_Journal__*.pdf
-
-# Paper tham khao cua tac gia khac -- ban quyen, khong redistribute
-He.pdf
-glorot10a.pdf
-Can classical initialization....pdf
-
-# Du lieu tho / checkpoint cua vong chay cu, da duoc thay bang iqp/results/
-ising_50.json
-ising_loss_normal.json
-pilot_traj.json
-ckpt_pilot/
-ckpt_extra/
