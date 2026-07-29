@@ -1,0 +1,1 @@
+{"experiment": "ratio", "n_iters": 2500, "stepsize": 1e-3, "note": "fixed-budget 2500 iters, chot voi thay 2026-07-18; moi ratio trong cac file ckpt o day deu chay voi budget nay"}

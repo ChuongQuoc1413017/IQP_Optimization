@@ -1,0 +1,6 @@
+pennylane==0.42.3
+pennylane-lightning==0.42.0
+numpy==1.26.4
+scipy==1.15.3
+matplotlib==3.10.9
+numberpartitioning==0.0.2

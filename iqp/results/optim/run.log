@@ -1,0 +1,2 @@
+optim scan: opts=['cobyla', 'spsa', 'sgd', 'qng'] qubits=[3, 6, 9, 12, 15] nprob=50 -> 50 tasks on 14 workers
+  done qng/n15

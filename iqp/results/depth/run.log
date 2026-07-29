@@ -1,0 +1,15 @@
+depth scan: metrics=['ratio', 'gv'] layers=[1, 2, 3, 4, 6, 8, 10] nprob=50 -> 700 tasks on 14 workers
+  done ratio/L1
+  done ratio/L2
+  done ratio/L3
+  done ratio/L4
+  done ratio/L6
+  done ratio/L8
+  done gv/L1
+  done gv/L2
+  done gv/L3
+  done gv/L4
+  done gv/L6
+  done gv/L8
+  done ratio/L10
+  done gv/L10
