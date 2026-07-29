@@ -4,16 +4,14 @@
 
 ## Install and run
 
-`backup/` is not needed to run anything, so skip its ~33 MB:
-
 ```bash
-git clone --filter=blob:none --sparse https://github.com/tungduy1704/IQP_Optimization.git
+git clone https://github.com/ChuongQuoc1413017/IQP_Optimization.git
 cd IQP_Optimization                 # repo root -- `import iqp` resolves from here
-git sparse-checkout set iqp
 pip install -r iqp/requirements.txt
 ```
 
-A plain `git clone` works too and gives you `backup/` as well.
+Python 3.10-3.12; `numpy==1.26.4` has no wheel for 3.13. Checked on Windows and
+Linux with Python 3.12.
 
 ---
 
@@ -74,9 +72,6 @@ iqp/
   results/      per-config checkpoints, merged JSON, run logs, output PDFs
   tools/        datagen.ipynb  regenerates data/*.json (run-once, offline)
                 draw.ipynb     quick circuit drawing via apply_ansatz
-
-backup/         the exploratory code this package was refactored from, kept for
-                provenance only
 ```
 
 ---
