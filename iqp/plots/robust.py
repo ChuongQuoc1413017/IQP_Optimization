@@ -64,7 +64,7 @@ for opt, (fmt, color, label) in OPTIM.items():
     m, s = _optim(opt)
     ax.plot(QUBITS, m, fmt, color=color, label=label)
     ax.fill_between(QUBITS, m - s, m + s, color=color, alpha=0.18, linewidth=0)
-ax.set_xlabel("Number of qubits $n$")
+ax.set_xlabel("Number of qubits")
 ax.set_xticks(QUBITS)
 ax.set_ylim(0.0, None)
 ax.legend(loc="upper left", ncol=2, frameon=False, handlelength=1.8,

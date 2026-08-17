@@ -138,7 +138,26 @@ def apply_ansatz(params, ops, coeffs, n_qubits: int, ansatz: str, spec) -> None:
 
 PI4_EPS = 0.05
 
-def init_params(name: str, n_params: int, n_qubits: int):
+def pauli_weight(ops) -> int:
+    """S: the most non-identity Paulis carried by any single term of H."""
+    return int(np.max(np.sum(np.asarray(ops), axis=1)))
+
+
+def circuit_depth(ops, coeffs, n_qubits: int, ansatz: str, spec) -> int:
+    """K: depth of the ansatz as written, from PennyLane's circuit graph."""
+    with qp.tape.QuantumTape() as tape:
+        apply_ansatz(np.zeros(n_params_for(ansatz, spec, n_qubits)),
+                     ops, coeffs, n_qubits, ansatz, spec)
+    return tape.graph.get_depth()
+
+
+def gamma_sq(ops, coeffs, n_qubits: int, ansatz: str, spec) -> float:
+    """Scale factor gamma^2 = 1 / (4 S (K + 2)) used by the He/LeCun heuristics."""
+    K = circuit_depth(ops, coeffs, n_qubits, ansatz, spec)
+    return 1.0 / (4.0 * pauli_weight(ops) * (K + 2))
+
+
+def init_params(name: str, n_params: int, gamma2: float | None = None):
     if name == "normal":
         return np.random.normal(0.0, 1.0, n_params)
     if name == "uniform":
@@ -146,7 +165,7 @@ def init_params(name: str, n_params: int, n_qubits: int):
     if name == "pi4":
         return np.random.uniform(np.pi / 4 - PI4_EPS, np.pi / 4 + PI4_EPS, n_params)
     if name == "he":
-        return np.random.normal(0.0, np.sqrt(2.0 / n_qubits), n_params)
-    if name == "glorot":
-        return np.random.normal(0.0, np.sqrt(1.0 / n_qubits), n_params)
+        return np.random.normal(0.0, np.sqrt(gamma2 * 2.0 / n_params), n_params)
+    if name == "lecun":
+        return np.random.normal(0.0, np.sqrt(gamma2 / n_params), n_params)
     raise ValueError(f"Invalid initialization: {name!r}")

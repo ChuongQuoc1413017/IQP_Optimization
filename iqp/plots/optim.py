@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from iqp.experiments.optim import QUBITS
+from iqp.plots.style import apply_style, FULL_WIDTH
+
+FIG_W = 6.5  # inches; embedded at \textwidth (~FULL_WIDTH) as a figure*
+apply_style(scale=FIG_W / FULL_WIDTH)
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.join(os.path.dirname(_HERE), "results")
@@ -31,17 +35,16 @@ def _curve(opt):
     return np.array(means), np.array(sems)
 
 
-fig, ax = plt.subplots(figsize=(6.5, 4.6))
+fig, ax = plt.subplots(figsize=(FIG_W, 4.6))
 for opt, (fmt, color, label) in STYLES.items():
     m, s = _curve(opt)
-    ax.plot(QUBITS, m, fmt, color=color, label=label, linewidth=2, markersize=6)
+    ax.plot(QUBITS, m, fmt, color=color, label=label)
     ax.fill_between(QUBITS, m - s, m + s, color=color, alpha=0.18, linewidth=0)
 
 ax.set_xlabel("Number of qubits $n$")
 ax.set_ylabel(r"Relative approx. ratio $r_{RA}$")
 ax.set_title(r"IQP full connectivity, Ising, $L=1$, $\mathcal{N}(0,1)$ init (50 instances)")
 ax.set_xticks(QUBITS)
-ax.grid(True, alpha=0.3, linestyle="--")
 ax.legend(frameon=False, ncol=2)
 plt.tight_layout()
 out = os.path.join(RESULTS, "optim", "Optim")

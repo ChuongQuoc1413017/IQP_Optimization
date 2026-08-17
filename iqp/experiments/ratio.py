@@ -2,14 +2,15 @@ import numpy as np
 from iqp.core.problems import ising_obs, maxcut_obs, number_partition_obs, binary_ops_to_hamiltonian, maxcut_value, solve_maxcut_exact_symmetry, sum_selected
 from iqp.core.data import dataset, exact_ising
 from iqp.core.engine import train_exact, get_probs, _seeded_init
-from iqp.core.ansatz import n_params_for
+from iqp.core.ansatz import n_params_for, gamma_sq
 from numberpartitioning import karmarkar_karp
 
 def ratio_ising(n, j, init, ansatz, spec):
     coeffs = np.array(dataset['ising'][n][j])
     ops = ising_obs(n, 2)
     H = binary_ops_to_hamiltonian(ops, coeffs)
-    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "ising", ansatz, j)
+    g2 = gamma_sq(ops, coeffs, n, ansatz, spec)
+    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "ising", ansatz, j, g2)
     _, final_loss = train_exact(H, ops, coeffs, n, ansatz, spec, p0)
     return float((exact_ising[n][j] - final_loss) / exact_ising[n][j])
 
@@ -17,7 +18,8 @@ def ratio_maxcut(n, j, init, ansatz, spec):
     edges, weights = dataset['maxcut'][n][j]
     ops, coeffs = maxcut_obs(n, edges, weights)
     H = binary_ops_to_hamiltonian(ops, coeffs)
-    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "maxcut", ansatz, j)
+    g2 = gamma_sq(ops, coeffs, n, ansatz, spec)
+    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "maxcut", ansatz, j, g2)
     params, _ = train_exact(H, ops, coeffs, n, ansatz, spec, p0)
     probs = get_probs(params, ops, coeffs, n, ansatz, spec)
     bits = np.binary_repr(int(np.argmax(probs)), n)
@@ -29,7 +31,8 @@ def ratio_partition(n, j, init, ansatz, spec):
     numbers = dataset['partition'][n][j]
     ops, coeffs = number_partition_obs(numbers)
     H = binary_ops_to_hamiltonian(ops, coeffs)
-    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "partition", ansatz, j)
+    g2 = gamma_sq(ops, coeffs, n, ansatz, spec)
+    p0 = _seeded_init(init, n_params_for(ansatz, spec, n), n, "partition", ansatz, j, g2)
     params, _ = train_exact(H, ops, coeffs, n, ansatz, spec, p0)
     probs = get_probs(params, ops, coeffs, n, ansatz, spec)
     bits = np.binary_repr(int(np.argmax(probs)), n)

@@ -31,7 +31,7 @@ def _qnode(H, n_layers):
 
 def _init(n_layers, j):
     np.random.seed(_seed_for(INIT, HAM, "iqp", N, j))
-    return init_params(INIT, n_layers * n_params_for("iqp", MODE, N), N)
+    return init_params(INIT, n_layers * n_params_for("iqp", MODE, N))
 
 
 def ratio_one(n_layers, j):
@@ -51,7 +51,7 @@ def gradvar_one(n_layers, j):
     grad_fn = qp.grad(qnode)
     np.random.seed(_seed_for(INIT, HAM, "iqp", N, j))
     npar = n_layers * n_params_for("iqp", MODE, N)
-    grads = [np.array(grad_fn(qnp.array(init_params(INIT, npar, N), requires_grad=True)))
+    grads = [np.array(grad_fn(qnp.array(init_params(INIT, npar), requires_grad=True)))
              for _ in range(GV_TRIALS)]
     return float(np.mean(np.var(np.array(grads), axis=0)))
 

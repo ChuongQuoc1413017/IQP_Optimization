@@ -38,9 +38,9 @@ def _seed_for(init, ham, ansatz, n, j):
     key = f"{init}|{ham}|{ansatz}|{n}|{j}".encode()
     return int.from_bytes(hashlib.sha256(key).digest()[:4], "little")
 
-def _seeded_init(init, n_params, n, ham, ansatz, j):
+def _seeded_init(init, n_params, n, ham, ansatz, j, gamma2):
     np.random.seed(_seed_for(init, ham, ansatz, n, j))
-    return init_params(init, n_params, n)
+    return init_params(init, n_params, gamma2)
 
 def grad_expval(params, H, ops, coeffs, n_qubits, ansatz, spec):
     dev = qp.device("lightning.qubit", wires=n_qubits, shots=None)

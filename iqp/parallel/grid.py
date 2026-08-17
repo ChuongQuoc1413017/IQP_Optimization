@@ -1,4 +1,4 @@
-INITS = ['normal', 'uniform', 'pi4', 'he', 'glorot']
+INITS = ['normal', 'uniform', 'pi4', 'he', 'lecun']
 HAMS  = ['ising', 'maxcut', 'partition']
 ANSATZ_CONFIGS = [('iqp','single'), ('iqp','circular'), ('iqp','full'),
                   ('hea', 2), ('qaoa', 2)]

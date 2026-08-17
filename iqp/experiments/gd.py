@@ -1,7 +1,7 @@
 from iqp.core.problems import ising_obs, maxcut_obs, number_partition_obs, binary_ops_to_hamiltonian
 from iqp.core.data import dataset
 from iqp.core.engine import grad_expval, _seed_for
-from iqp.core.ansatz import n_params_for, init_params
+from iqp.core.ansatz import n_params_for, init_params, gamma_sq
 
 import numpy as np
 
@@ -10,9 +10,10 @@ N_TRIALS = 100
 def gradient_variance(H, ops, coeffs, n, ansatz, spec, init, ham, j, n_trials=N_TRIALS):
     np.random.seed(_seed_for(init, ham, ansatz, n, j))
     npar = n_params_for(ansatz, spec, n)
+    g2 = gamma_sq(ops, coeffs, n, ansatz, spec)
     grads = []
     for _ in range(n_trials):
-        p = init_params(init, npar, n)
+        p = init_params(init, npar, g2)
         grads.append(grad_expval(p, H, ops, coeffs, n, ansatz, spec))
     grads = np.array(grads)
     return float(np.mean(np.var(grads, axis=0)))

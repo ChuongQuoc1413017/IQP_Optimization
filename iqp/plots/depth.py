@@ -3,6 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from iqp.experiments.depth import LAYERS, N, MODE, INIT, HAM
+from iqp.plots.style import apply_style, FULL_WIDTH
+
+FIG_W = 11  # inches; embedded at \textwidth (~FULL_WIDTH) as a figure*
+SCALE = FIG_W / FULL_WIDTH
+apply_style(scale=SCALE)
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 DEPTH = os.path.join(os.path.dirname(_HERE), "results", "depth")
@@ -23,30 +28,28 @@ def _load(metric):
 r_mean, r_sem = _load("ratio")
 g_mean, g_sem = _load("gv")
 
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+fig, axes = plt.subplots(1, 2, figsize=(FIG_W, 4.2))
 
 ax = axes[0]
-ax.plot(LAYERS, r_mean, "o-", color=COLOR, linewidth=2, markersize=6)
+ax.plot(LAYERS, r_mean, "o-", color=COLOR)
 ax.fill_between(LAYERS, r_mean - r_sem, r_mean + r_sem, color=COLOR, alpha=0.2, linewidth=0)
 ax.set_xlabel("Number of layers $L$")
 ax.set_ylabel(r"Relative approx. ratio $r_{RA}$")
 ax.set_title("Optimization performance")
-ax.grid(True, alpha=0.3, linestyle="--")
 ax.set_xticks(LAYERS)
 
 ax = axes[1]
-ax.plot(LAYERS, g_mean, "o-", color=COLOR, linewidth=2, markersize=6)
+ax.plot(LAYERS, g_mean, "o-", color=COLOR)
 ax.fill_between(LAYERS, g_mean - g_sem, g_mean + g_sem, color=COLOR, alpha=0.2, linewidth=0)
 ax.set_xlabel("Number of layers $L$")
 ax.set_ylabel(r"Gradient variance $\mathrm{Var}[\partial\mathcal{C}/\partial\theta_k]$")
 ax.set_title("Trainability")
 ax.set_yscale("log")
-ax.grid(True, alpha=0.3, linestyle="--")
 ax.set_xticks(LAYERS)
 
 fig.suptitle(rf"IQP full connectivity, Ising, $n={N}$, $\mathcal{{N}}(0,1)$ init "
              f"({len(json.load(open(os.path.join(DEPTH, f'ratio__L{LAYERS[0]}.json'))))} instances)",
-             fontsize=12)
+             fontsize=10 * SCALE)
 plt.tight_layout()
 out = os.path.join(DEPTH, "Depth")
 plt.savefig(out + ".pdf", dpi=300, bbox_inches="tight")

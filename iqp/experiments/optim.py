@@ -27,7 +27,7 @@ def _qnode(H, n):
 
 def _init(n, j):
     np.random.seed(_seed_for(INIT, HAM, "iqp", n, j))
-    return init_params(INIT, n_params_for("iqp", MODE, n), n)
+    return init_params(INIT, n_params_for("iqp", MODE, n))
 
 def _final_loss(opt_name, qn, p0):
     if opt_name == "cobyla":
